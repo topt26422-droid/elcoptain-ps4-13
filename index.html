@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html manifest="Cache.manifest" lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,7 +30,15 @@
             margin-bottom: 20px; 
         }
         h1 { margin: 10px 0; color: #00d2ff; }
-        p { color: #aaa; margin-bottom: 30px; }
+        p { color: #aaa; margin-bottom: 20px; }
+        #status { 
+            background: #25293c; 
+            padding: 12px; 
+            border-radius: 6px; 
+            color: #00d2ff; 
+            font-weight: bold; 
+            margin-bottom: 25px; 
+        }
         .btn { 
             display: inline-block; 
             padding: 14px 28px; 
@@ -51,14 +59,41 @@
 </head>
 <body>
     <div class="container">
-        <!-- مكان الصورة الشخصية أو الشعار -->
+        <!-- الشعار -->
         <img src="logo.png" alt="شعار القبطان ستور">
         
         <h1>القبطان ستور</h1>
         <p>مرحباً بك في البوابة الخاصة بصيانة وألعاب البلايستيشن</p>
         
-        <!-- زر التشغيل أو الأداة -->
-        <a href="#" class="btn">تشغيل الأداة / البايلود</a>
+        <!-- حالة التخزين -->
+        <div id="status">جاري فحص التخزين الأوفلاين...</div>
+        
+        <!-- زر التشغيل -->
+        <a href="#" class="btn">تشغيل GoldHEN</a>
     </div>
+
+    <!-- سكربت التحكم في التخزين الأوفلاين -->
+    <script>
+        const statusDiv = document.getElementById('status');
+        
+        if (window.applicationCache) {
+            window.applicationCache.addEventListener('checking', function() {
+                statusDiv.innerHTML = 'جاري الفحص عن تحديثات...';
+            });
+            window.applicationCache.addEventListener('downloading', function() {
+                statusDiv.innerHTML = 'جاري حفظ الموقع للأوفلاين... برجاء الانتظار';
+            });
+            window.applicationCache.addEventListener('cached', function() {
+                statusDiv.innerHTML = '✅ تم حفظ الموقع بنجاح! يمكنك استخدامه بدون إنترنت الآن.';
+                alert('تم حفظ الموقع بنجاح! يمكنك الآن فصل الإنترنت واستخدامه أوفلاين.');
+            });
+            window.applicationCache.addEventListener('noupdate', function() {
+                statusDiv.innerHTML = '✅ الموقع محفوظ مسبقاً وجاهز للاستخدام أوفلاين.';
+            });
+            window.applicationCache.addEventListener('error', function() {
+                statusDiv.innerHTML = 'جاهز للاستخدام.';
+            });
+        }
+    </script>
 </body>
 </html>
